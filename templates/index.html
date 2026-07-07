@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-time Chat Application</title>
+</head>
+<body>
+    <h1>Chat with Us!</h1>
+    <input type="text" id="message-input" placeholder="Type a message...">
+    <button id="send-button">Send</button>
+    <div id="messages"></div>
+
+    <script>
+        var socket = io('http://localhost:5000');
+
+        document.getElementById('send-button').addEventListener('click', function() {
+            var message = document.getElementById('message-input').value;
+            socket.emit('message', {'client_id': 1, 'message': message});
+            document.getElementById('message-input').value = '';
+        });
+
+        socket.on('message', function(data) {
+            var messagesDiv = document.getElementById('messages');
+            var newMessage = document.createElement('p');
+            newMessage.textContent = data.text;
+            messagesDiv.appendChild(newMessage);
+        });
+    </script>
+</body>
+</html>
